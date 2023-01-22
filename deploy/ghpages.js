@@ -3,7 +3,7 @@ const ghpages = require('gh-pages');
 
 const options = {
   branch: 'gh-pages',
-  repo: 'https://github.com/Bruno-Yu/vue_2023_week2.git',
+  repo: 'https://github.com/Bruno-Yu/vue_2023_week4.git',
 };
 
 const callback = (err) => {
