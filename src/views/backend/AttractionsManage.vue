@@ -5,7 +5,9 @@
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-4 inline-block min-w-full sm:px-6 lg:px-8">
             <div class="flex justify-end mb-5">
-              <button type="button" class="inline-block px-6 py-2 border-2 border-gray-800 text-gray-800 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out font-bold"  @click="openNewModal">新增產品</button>
+              <button type="button"
+                class="inline-block px-6 py-2 border-2 border-gray-800 text-gray-800 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out font-bold"
+                @click="openNewModal">新增產品</button>
             </div>
             <div class="overflow-hidden border border-solid border-gray-300">
               <!-- {{ data }} -->
@@ -60,7 +62,8 @@
                             class="inline-block px-4 py-1.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-900 focus:bg-gray-900 focus:outline-none focus:ring-0 active:bg-gray-900 transition duration-150 ease-in-out"
                             @click="openModal(item)">編輯</button>
                           <button type="button"
-                            class="rounded-r inline-block px-4 py-1.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-900 focus:bg-gray-900 focus:outline-none focus:ring-0 active:bg-gray-900 transition duration-150 ease-in-out" @click="openDeleteModal(item)">刪除</button>
+                            class="rounded-r inline-block px-4 py-1.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-900 focus:bg-gray-900 focus:outline-none focus:ring-0 active:bg-gray-900 transition duration-150 ease-in-out"
+                            @click="openDeleteModal(item)">刪除</button>
                         </div>
                       </div>
                     </td>
@@ -80,6 +83,10 @@
               :src="currentItem.imageUrl" :alt="currentItem.title" />
             <div class="p-6 flex flex-col justify-start">
               <h5 class="text-gray-900 text-xl font-medium mb-2">{{ currentItem.title }}</h5>
+              <div class="text-gray-700 text-base mb-2">
+                <star-rating star-size="20" animate="true" increment="0.5" read-only="true"
+                  :rating="currentItem.rating ? currentItem.rating : 0"></star-rating>
+              </div>
               <p class="text-gray-700 text-base mb-2">
                 {{ currentItem.category }}
               </p>
@@ -91,16 +98,18 @@
               <div v-if="currentItem.imagesUrl?.length" class="grid gap-1 grid-rows-1 grid-cols-3 shadow-lg">
                 <img v-for="(item, index) in currentItem.imagesUrl" :key="index" class="h-40 w-40 block object-cover"
                   :src="item" :alt="item">
-                </div>
-                <div v-else></div>
+              </div>
+              <div v-else></div>
             </div>
           </div>
         </div>
         <p v-else class="text-gray-600">請選擇單一產品查看</p>
       </div>
     </div>
-    <editModal ref="modal" :currentItem="currentItem" :isNew="isNew" @update-product="editAdminProduct" @add-product="addAdminProduct" />
-    <infoModal ref="infoModal"  :content="messageContent" @delete-product="deleteAdminProduct" @hide-modal="hideInfoModal"/>
+    <editModal ref="modal" :currentItem="currentItem" :isNew="isNew" @update-product="editAdminProduct"
+      @add-product="addAdminProduct" />
+    <infoModal ref="infoModal" :content="messageContent" @delete-product="deleteAdminProduct"
+      @hide-modal="hideInfoModal" />
   </main>
 </template>
 
@@ -110,8 +119,8 @@ import infoModal from '@/components/infoModal.vue';
 //  產品資料
 import atrApi from '@/api/atrAPI';
 import { ref, onMounted } from 'vue';
-import { userStore } from '@/stores';
-import { useRouter } from 'vue-router';
+// import { userStore } from '@/stores';
+// import { useRouter } from 'vue-router';
 
 
 export default {
@@ -119,8 +128,8 @@ export default {
   setup() {
     const data = ref([]);
     const currentItem = ref({});
-    const store = userStore();
-    const router = useRouter();
+    // const store = userStore();
+    // const router = useRouter();
 
 
     const isNew = ref(false);
@@ -167,10 +176,11 @@ export default {
     async function editAdminProduct(data) {
       const { id } = data;
       const res = await atrApi.editAdminProduct(id, data);
-      hideModal();
       if (res.success) {
+        hideModal();
         messageContent.value.message = res.message;
         infoModal.value.openModal();
+        getAdminProducts();
       } else {
         if (typeof res.response.data.message === 'string') {
           messageContent.value.message = res.response.data.message;
@@ -179,14 +189,14 @@ export default {
         }
         infoModal.value.openModal();
       }
-      getAdminProducts();
     }
     async function addAdminProduct(data) {
       const res = await atrApi.addAdminProduct(data);
-      hideModal();
       if (res.success) {
+        hideModal();
         messageContent.value.message = res.message;
         infoModal.value.openModal();
+        getAdminProducts();
       } else {
         if (typeof res.response.data.message === 'string') {
           messageContent.value.message = res.response.data.message;
@@ -195,7 +205,6 @@ export default {
         }
         infoModal.value.openModal();
       }
-      getAdminProducts();
     }
 
     async function getAdminProducts() {
@@ -215,7 +224,6 @@ export default {
     async function deleteAdminProduct() {
       hideInfoModal();
       const res = await atrApi.deleteAdminProduct(currentItem.value.id);
-      console.log(res);
       if (res.success) {
         messageContent.value.message = res.message;
       } else {
@@ -231,11 +239,12 @@ export default {
 
 
     onMounted(() => {
-      if (store.$state.login) {
-        getAdminProducts();
-      } else {
-        router.push('/');
-      }
+      getAdminProducts();
+      // if (store.$state.login) {
+      //   getAdminProducts();
+      // } else {
+      //   router.push('/');
+      // }
     });
     return {
       data,

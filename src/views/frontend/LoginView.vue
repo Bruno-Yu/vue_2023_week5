@@ -70,7 +70,7 @@
       </div>
     </div>
   </section>
-  <infoModal ref="infoModal"  :content="messageContent"  @hide-modal="hideInfoModal"/>
+  <infoModal ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
@@ -93,6 +93,13 @@ export default {
       message: '',
       status: '',
     })
+
+    function hideInfoModal() {
+      infoModal.value.hideModal();
+      messageContent.value.title = '提示';
+      messageContent.value.message = '';
+      messageContent.value.status = '';
+    }
 
     async function login() {
       const params = {
@@ -122,6 +129,7 @@ export default {
       submit,
       infoModal,
       messageContent,
+      hideInfoModal,
     }
   }
 

@@ -42,20 +42,22 @@
           mt-2
           lg:mt-0
           mr-auto
-        " href="#"  @click.prevent="$router.push('./')">
+        " href="#" @click.prevent="$router.push('./')">
           府城印象
         </a>
         <!-- Left links -->
         <ul class="navbar-nav flex flex-col pl-0 list-style-none ms-auto">
           <li class="nav-item p-2">
-            <a class="nav-link  text-white hover:opacity-80 focus:opacity-80 p-0" href="#" @click.prevent="$router.push('./')" >首頁</a>
+            <a class="nav-link  text-white hover:opacity-80 focus:opacity-80 p-0" href="#"
+              @click.prevent="$router.push('./')">首頁</a>
           </li>
           <li class="nav-item p-2">
             <a class="nav-link text-white hover:opacity-80 focus:opacity-80 p-0" href="#" @click.prevent="logOut">登出
             </a>
           </li>
           <li class="nav-item p-2">
-            <a class="nav-link text-white hover:opacity-80 focus:opacity-80 p-0" href="#"  @click.prevent="$router.push('./admin')">景點編輯</a>
+            <a class="nav-link text-white hover:opacity-80 focus:opacity-80 p-0" href="#"
+              @click.prevent="$router.push('./admin')">景點編輯</a>
           </li>
         </ul>
         <!-- Left links -->
@@ -73,12 +75,12 @@
       府城印象 @copyRight
     </p>
   </footer>
-    <infoModal ref="infoModal"  :content="messageContent"  @hide-modal="hideInfoModal"/>
+  <infoModal ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
 // import IndexView from './IndexView.vue';
-import { onMounted, ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import atrApi from '@/api/atrAPI';
 import { userStore } from '@/stores';
 import { useRouter } from 'vue-router'
@@ -119,7 +121,8 @@ export default {
       // store.$patch({ token: token, login: true, });
     }
 
-    onMounted(() => {
+
+    watchEffect(() => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       store.$patch({ token: token, login: true, });
       checkLoginStatus();

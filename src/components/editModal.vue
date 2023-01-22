@@ -92,6 +92,39 @@
                 <div class="grid grid-cols-2 gap-4">
                   <div class="flex justify-center">
                     <div class="mb-3 xl:w-96">
+                      <label for="title" class="form-label inline-block mb-2 text-gray-700">評分</label>
+
+                      <star-rating star-size="20" animate="true" increment="0.5"
+                        v-model:rating="tempProduct.rating"></star-rating>
+
+                    </div>
+                  </div>
+                  <div class="flex justify-center">
+                    <div class="mb-3 xl:w-96">
+                      <label for="category" class="form-label inline-block mb-2 text-gray-700">剩餘</label>
+                      <input type="text" class="
+                          form-control
+                          block
+                          w-full
+                          px-3
+                          py-1.5
+                          text-base
+                          font-normal
+                          text-gray-700
+                          bg-white bg-clip-padding
+                          border border-solid border-gray-300
+                          rounded
+                          transition
+                          ease-in-out
+                          m-0
+                          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                        " id="category" v-model="tempProduct.num" placeholder="請輸入剩餘數量" min=0 />
+                    </div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex justify-center">
+                    <div class="mb-3 xl:w-96">
                       <label for="category" class="form-label inline-block mb-2 text-gray-700">分類</label>
                       <input type="text" class="
                           form-control
@@ -155,7 +188,7 @@
                           ease-in-out
                           m-0
                           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                        " id="originPrice" v-model.number="tempProduct.origin_price" placeholder="請輸入原價" />
+                        " id="originPrice" v-model.number="tempProduct.origin_price" placeholder="請輸入原價" min=0 />
                     </div>
                   </div>
                   <div class="flex justify-center">
@@ -177,7 +210,7 @@
                           ease-in-out
                           m-0
                           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                        " id="price" v-model="tempProduct.price" placeholder="請輸入售價" />
+                        " id="price" v-model="tempProduct.price" placeholder="請輸入售價" min=0 />
                     </div>
                   </div>
                 </div>
@@ -227,11 +260,12 @@
                       " id="description" rows="3" v-model="tempProduct.content" placeholder="請輸入景點說明"></textarea>
                   </div>
                 </div>
-                <div class="flex justify-center">
+                <div class="flex">
                   <div class="form-check form-switch">
                     <input
                       class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
-                      type="checkbox" role="switch" v-model="tempProduct.is_enabled"  :true-value="1" :false-value="0" id="activate"  >
+                      type="checkbox" role="switch" v-model="tempProduct.is_enabled" :true-value="1" :false-value="0"
+                      id="activate">
                     <label class="form-check-label inline-block text-gray-800" for="activate">是否啟用</label>
                   </div>
                 </div>
@@ -241,7 +275,7 @@
           <div
             class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
             <button type="button"
-              class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+              class="inline-block px-6 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
               data-bs-dismiss="modal">
               取消
             </button>
@@ -260,12 +294,14 @@
 <script>
 import { ref, toRefs, onMounted, watchEffect } from 'vue';
 import Modal from 'tw-elements/dist/src/js/bs/src/modal';
+// import starRating from '@/components/starRating.vue';
 
 export default {
+  // components: { starRating },
   props: {
     currentItem: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     isNew: {
       type: Boolean,
@@ -277,18 +313,31 @@ export default {
     const emptyBlank = {
       title: '',
       category: '',
+      rating: 0,
       description: '',
       price: 0,
+      num: 0,
       origin_price: 0,
       imagesUrl: [],
       imageUrl: '',
       is_enabled: 0,
     };
     // 只有 tempProduct 1個原始值
+    const rating = ref(0);
     const tempProduct = ref({});
     const imgUploadLoading = ref(false);
+    // const iconStyle = ref(['far', 'star']);
 
-    function uploadImg() {}
+    // function changeColor() {
+    //   // icon.value = ['fa', 'star']
+    //   iconStyle.value = ['fa', 'star']
+    // }
+    // function resetColor() {
+    //   // icon.value = ['fa', 'star']
+    //   iconStyle.value = ['far', 'star']
+    // }
+
+    function uploadImg() { }
     // modal
     const modal = ref(null);
     const bsModal = ref(null);
@@ -330,6 +379,7 @@ export default {
       openModal,
       hideModal,
       confirm,
+      rating,
     }
   }
 

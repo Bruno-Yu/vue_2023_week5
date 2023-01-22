@@ -39,14 +39,16 @@ class atrApi extends Api {
   }
 
   // 更新
-  static async editAdminProduct(id, {title, category, origin_price, price, unit, description, content, is_enabled,imageUrl, imagesUrl }) {
+  static async editAdminProduct(id, {title, category, origin_price, rating, num, price, unit, description, content, is_enabled,imageUrl, imagesUrl }) {
     const params = {
     'data':{ 
       title,
       category,
       origin_price,
+      rating,
       price,
       unit,
+      num,
       description,
       content,
       is_enabled,
@@ -58,7 +60,7 @@ class atrApi extends Api {
     return res;
   }
     // 新增
-  static async addAdminProduct( {title, category, origin_price, price, unit, description, content, is_enabled,imageUrl, imagesUrl }) {
+  static async addAdminProduct( {title, category, rating, origin_price, price, num, unit, description, content, is_enabled,imageUrl, imagesUrl }) {
     const params = {
     'data':{ 
       title,
@@ -66,6 +68,8 @@ class atrApi extends Api {
       origin_price,
       price,
       unit,
+      num,
+      rating,
       description,
       content,
       is_enabled,
