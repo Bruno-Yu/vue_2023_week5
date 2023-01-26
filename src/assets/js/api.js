@@ -19,7 +19,6 @@ class Api {
       // 若有 權杖則先存取在 state.user 中
       // const { token } = this.$store.state.user.token;
       const { token } = store.$state;
-      console.log('store', token);
       // 並存取在 reqHeader 裡
       // reqHeaders['Auth-token'] = `${token}`;
       reqHeaders.Authorization = `${token}`;

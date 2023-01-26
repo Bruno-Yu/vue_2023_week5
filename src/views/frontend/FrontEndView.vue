@@ -34,7 +34,7 @@
         </svg>
       </button>
       <div class="collapse navbar-collapse flex-grow items-center" id="navbarSupportedContent">
-        <a class="
+        <RouterLink class="
           flex
           items-center
           text-gray-900
@@ -43,16 +43,17 @@
           mt-2
           lg:mt-0
           mr-auto
-        " href="#">
+        " to="/" exact-active-class="no-active">
           府城印象
-        </a>
+        </RouterLink>
         <!-- Left links -->
         <ul class="navbar-nav flex flex-col pl-0 list-style-none ms-auto">
           <li class="nav-item p-2">
-            <a class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" href="#">首頁</a>
+            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="/">首頁
+            </RouterLink>
           </li>
           <li class="nav-item p-2">
-            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="./login">登入
+            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="login">登入
             </RouterLink>
           </li>
           <li class="nav-item p-2">

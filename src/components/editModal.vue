@@ -94,7 +94,7 @@
                     <div class="mb-3 xl:w-96">
                       <label for="title" class="form-label inline-block mb-2 text-gray-700">評分</label>
 
-                      <star-rating star-size="20" animate="true" increment="0.5"
+                      <star-rating :star-size="20" :animate="true" :increment="0.5"
                         v-model:rating="tempProduct.rating"></star-rating>
 
                     </div>
