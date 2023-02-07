@@ -118,7 +118,7 @@ export default {
         messageContent.value.message = res.response.data.message;
         infoModal.value.openModal();
       }
-      // store.$patch({ token: token, login: true, });
+      store.$patch({ token: '', login: false, });
     }
 
 

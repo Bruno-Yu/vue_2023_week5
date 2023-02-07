@@ -8,6 +8,7 @@ export const userStore = defineStore('userStore', {
     token: '',
     confirm: '已成功引入 pinia',
     login: false, // 是否是登入狀態
+    adminProducts: [],
   }),
   getters: {
 
