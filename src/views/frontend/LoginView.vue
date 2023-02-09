@@ -38,7 +38,7 @@
             <!-- Submit button -->
             <button type="button"
               class="block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700  focus:bg-blue-700 active:bg-blue-800 transition duration-150 ease-in-out w-full"
-              data-mdb-ripple="true" data-mdb-ripple-color="light" @click="submit">
+              data-mdb-ripple="true" data-mdb-ripple-color="light" @click="submit(account, password)">
               登入
             </button>
 
@@ -74,55 +74,69 @@
 </template>
 
 <script>
-import atrApi from '@/api/atrAPI';
-import { userStore } from '@/stores';
+// import atrApi from '@/api/atrAPI';
+// import { userStore } from '@/stores';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import infoModal from '@/components/infoModal.vue';
+// import { useRouter } from 'vue-router';
+// import infoModal from '@/components/infoModal.vue';
+
+import { useApi } from '@/hooks/useApi';
+import { useModal } from '@/hooks/useModal';
 
 export default {
-  components: { infoModal },
+  // components: { infoModal },
   setup() {
+    const { login } = useApi();
+    const { infoModal, hideInfoModal, messageContent } = useModal();
     const password = ref('');
     const account = ref('');
-    const store = userStore();
-    const router = useRouter();
-    const infoModal = ref(null);
-    const messageContent = ref({
-      title: '提示',
-      message: '',
-      status: '',
-    })
-
-    function hideInfoModal() {
-      infoModal.value.hideModal();
-      messageContent.value.title = '提示';
-      messageContent.value.message = '';
-      messageContent.value.status = '';
+    function submit(account, password) {
+      if (password.trim && account.trim) {
+        login(account, password)
+      }
     }
 
-    async function login() {
-      const params = {
-        username: account.value,
-        password: password.value,
-      }
-      const res = await atrApi.login(params);
-      if (res.success) {
-        const { token, expired } = res;
-        store.$patch({ token: token, login: true, });
-        document.cookie = `hexToken=${token};expires=${new Date(expired)}; path=/`;
-        // axios.defaults.headers.common.Authorization = token;
-        router.push('./admin')
-      } else {
-        messageContent.value.message = res.response.data.message;
-        infoModal.value.openModal();
-      }
-    }
-    function submit() {
-      if (password.value.trim && account.value.trim) {
-        login()
-      }
-    }
+    // 原本的程式碼
+    // const password = ref('');
+    // const account = ref('');
+    // const store = userStore();
+    // const router = useRouter();
+    // const infoModal = ref(null);
+    // const messageContent = ref({
+    //   title: '提示',
+    //   message: '',
+    //   status: '',
+    // })
+
+    // function hideInfoModal() {
+    //   infoModal.value.hideModal();
+    //   messageContent.value.title = '提示';
+    //   messageContent.value.message = '';
+    //   messageContent.value.status = '';
+    // }
+
+    // async function login() {
+    //   const params = {
+    //     username: account.value,
+    //     password: password.value,
+    //   }
+    //   const res = await atrApi.login(params);
+    //   if (res.success) {
+    //     const { token, expired } = res;
+    //     store.$patch({ token: token, login: true, });
+    //     document.cookie = `hexToken=${token};expires=${new Date(expired)}; path=/`;
+    //     // axios.defaults.headers.common.Authorization = token;
+    //     router.push('./admin')
+    //   } else {
+    //     messageContent.value.message = res.response.data.message;
+    //     infoModal.value.openModal();
+    //   }
+    // }
+    // function submit() {
+    //   if (password.value.trim && account.value.trim) {
+    //     login()
+    //   }
+    // }
     return {
       password,
       account,

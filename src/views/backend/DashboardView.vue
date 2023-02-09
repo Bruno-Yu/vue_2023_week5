@@ -80,46 +80,54 @@
 
 <script>
 // import IndexView from './IndexView.vue';
-import { ref, watchEffect } from 'vue';
-import atrApi from '@/api/atrAPI';
+import { watchEffect } from 'vue';
+// import atrApi from '@/api/atrAPI';
 import { userStore } from '@/stores';
-import { useRouter } from 'vue-router'
-import infoModal from '@/components/infoModal.vue';
+// import { useRouter } from 'vue-router';
+// import infoModal from '@/components/infoModal.vue';
+
+import { useApi } from '@/hooks/useApi';
+import { useModal } from '@/hooks/useModal';
 
 export default {
-  components: { infoModal },
+  // components: { infoModal },
   setup() {
     const store = userStore();
-    const router = useRouter()
-    const infoModal = ref(null);
-    const messageContent = ref({
-      title: '提示',
-      message: '',
-      status: '',
-    })
-    function hideInfoModal() {
-      infoModal.value.hideModal();
-      messageContent.value.title = '提示';
-      messageContent.value.message = '';
-      messageContent.value.status = '';
-    }
+    const { checkLoginStatus, logOut } = useApi();
+    const { infoModal, hideInfoModal, messageContent } = useModal();
 
-    async function checkLoginStatus() {
-      const res = await atrApi.checkLoginStatus();
-      if (!res.success) {
-        router.push('/');
-      }
-    }
-    async function logOut() {
-      const res = await atrApi.logOut();
-      if (res.success) {
-        router.push('/');
-      } else {
-        messageContent.value.message = res.response.data.message;
-        infoModal.value.openModal();
-      }
-      store.$patch({ token: '', login: false, });
-    }
+    // 原本的程式碼
+    // const store = userStore();
+    // const router = useRouter()
+    // const infoModal = ref(null);
+    // const messageContent = ref({
+    //   title: '提示',
+    //   message: '',
+    //   status: '',
+    // })
+    // function hideInfoModal() {
+    //   infoModal.value.hideModal();
+    //   messageContent.value.title = '提示';
+    //   messageContent.value.message = '';
+    //   messageContent.value.status = '';
+    // }
+
+    // async function checkLoginStatus() {
+    //   const res = await atrApi.checkLoginStatus();
+    //   if (!res.success) {
+    //     router.push('/');
+    //   }
+    // }
+    // async function logOut() {
+    //   const res = await atrApi.logOut();
+    //   if (res.success) {
+    //     router.push('/');
+    //   } else {
+    //     messageContent.value.message = res.response.data.message;
+    //     infoModal.value.openModal();
+    //   }
+    //   store.$patch({ token: '', login: false, });
+    // }
 
 
     watchEffect(() => {
