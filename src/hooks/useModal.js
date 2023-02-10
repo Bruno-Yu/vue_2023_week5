@@ -1,50 +1,85 @@
+import { ref, watch } from 'vue'
+// import { useAdmin } from '@/hooks/useAdmin';
+import { userStore } from '@/stores'
 
-import { ref } from "vue";
-
-export const useApi = () => { 
-  // 當前產品
-  const currentItem = ref({});
+export const useModal = () => { 
+  // const { currentItem } = useAdmin();
+  const store = userStore();
 
   // 訊息視窗
   const infoModal = ref(null);
-      const messageContent = ref({
-      title: '提示',
-      message: '',
-      status: '',
-    });
+  const showInfoModal= ref(false);
+  // const infoModal = ref(null);
+    //   const messageContent = ref({
+    //   title: '提示',
+    //   message: '',
+    //   status: '',
+    // });
         function hideInfoModal() {
       infoModal.value.hideModal();
-      messageContent.value.title = '提示';
-      messageContent.value.message = '';
-      messageContent.value.status = '';
+      store.$patch((state)=>{state.messageContent.title  = '提示'});
+      store.$patch((state)=>{state.messageContent.message  = ''});
+      store.$patch((state)=>{state.messageContent.state  = ''});
+      // messageContent.value.title = '提示';
+      // messageContent.value.message = '';
+      // messageContent.value.status = '';
     }
 
 //  判別是 新增還是編輯視窗
-      const isNew = ref(false);
+    const isNew = ref(false);
+
 
      // 刪除視窗
     function openDeleteModal(item) {
-      currentItem.value = item;
-      messageContent.value.title = '刪除提示';
-      messageContent.value.message = '請確認是否要刪除!';
-      messageContent.value.status = 'delete';
+      store.$patch({currentItem:item});
+      // currentItem.value = item;
+      store.$patch((state)=>{state.messageContent.title  = '刪除提示'});
+      store.$patch((state)=>{state.messageContent.message  = '請確認是否要刪除!'});
+      store.$patch((state)=>{state.messageContent.state  = 'delete'});
+      // messageContent.value.title = '刪除提示';
+      // messageContent.value.message = '請確認是否要刪除!';
+      // messageContent.value.status = 'delete';
       infoModal.value.openModal();
     }
 
         // 編輯 & 新增視窗 & 邏輯
-    const modal = ref(null);
+    const editModal = ref(null);
+    const showEditModal= ref(false);
+    // const modal = ref(null);
     function openModal(item) {
-      currentItem.value = item;
+      store.$patch({currentItem:item});
+      // currentItem.value = item;
       isNew.value = false;
-      modal.value.openModal();
+      editModal.value.openModal();
     }
     function hideModal() {
-      modal.value.hideModal();
+      editModal.value.hideModal();
     }
     function openNewModal() {
       isNew.value = true;
-      modal.value.openModal();
+      editModal.value.openModal();
     }
+    // onMounted(() => {
+    //   infoModal.value = document.querySelector('.infoModal');
+    //   modal.value = document.querySelector('.editModal');
+    // })
+    // watchEffect(() => {
+    //       if(showInfoModal.value){
 
-  return { messageContent,infoModal, hideInfoModal, isNew , openDeleteModal, openModal,  hideModal, openNewModal  };
+    //       }else if(!showInfoModal.value){
+    //         hideInfoModal()
+    //       };
+    // })
+    watch([showInfoModal, showEditModal], (val)=>{
+        if(val[0]){
+          infoModal.value.openModal();
+        }else if(!val[0]){
+          infoModal.value.hideModal();
+        }
+        if(!val[1]){
+          hideModal();
+        }
+      })
+
+  return { editModal ,infoModal, showEditModal ,showInfoModal, hideInfoModal, isNew , openDeleteModal, openModal,  hideModal, openNewModal  };
 };

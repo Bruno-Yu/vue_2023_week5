@@ -23,5 +23,5 @@ app.use(router);
 app.use(store);
 app.component('star-rating', StarRating);
 app.component('font-awesome-icon', FontAwesomeIcon);
-app.component('infoModal', infoModal);
+app.component('info-modal', infoModal);
 app.mount('#app');

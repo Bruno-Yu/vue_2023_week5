@@ -70,24 +70,22 @@
       </div>
     </div>
   </section>
-  <infoModal ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
+  <info-modal   class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
-// import atrApi from '@/api/atrAPI';
-// import { userStore } from '@/stores';
 import { ref } from 'vue';
-// import { useRouter } from 'vue-router';
-// import infoModal from '@/components/infoModal.vue';
-
 import { useApi } from '@/hooks/useApi';
 import { useModal } from '@/hooks/useModal';
+import { userStore } from '@/stores';
+import { storeToRefs } from 'pinia';
 
 export default {
-  // components: { infoModal },
   setup() {
+    const store = userStore();
+    const { messageContent } = storeToRefs(store);
     const { login } = useApi();
-    const { infoModal, hideInfoModal, messageContent } = useModal();
+    const { hideInfoModal, infoModal } = useModal();
     const password = ref('');
     const account = ref('');
     function submit(account, password) {
@@ -95,48 +93,6 @@ export default {
         login(account, password)
       }
     }
-
-    // 原本的程式碼
-    // const password = ref('');
-    // const account = ref('');
-    // const store = userStore();
-    // const router = useRouter();
-    // const infoModal = ref(null);
-    // const messageContent = ref({
-    //   title: '提示',
-    //   message: '',
-    //   status: '',
-    // })
-
-    // function hideInfoModal() {
-    //   infoModal.value.hideModal();
-    //   messageContent.value.title = '提示';
-    //   messageContent.value.message = '';
-    //   messageContent.value.status = '';
-    // }
-
-    // async function login() {
-    //   const params = {
-    //     username: account.value,
-    //     password: password.value,
-    //   }
-    //   const res = await atrApi.login(params);
-    //   if (res.success) {
-    //     const { token, expired } = res;
-    //     store.$patch({ token: token, login: true, });
-    //     document.cookie = `hexToken=${token};expires=${new Date(expired)}; path=/`;
-    //     // axios.defaults.headers.common.Authorization = token;
-    //     router.push('./admin')
-    //   } else {
-    //     messageContent.value.message = res.response.data.message;
-    //     infoModal.value.openModal();
-    //   }
-    // }
-    // function submit() {
-    //   if (password.value.trim && account.value.trim) {
-    //     login()
-    //   }
-    // }
     return {
       password,
       account,

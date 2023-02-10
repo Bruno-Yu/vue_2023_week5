@@ -63,7 +63,6 @@
         <!-- Left links -->
       </div>
       <!-- Collapsible wrapper -->
-
     </div>
   </nav>
   <main class="container mx-auto">
@@ -75,61 +74,22 @@
       府城印象 @copyRight
     </p>
   </footer>
-  <infoModal ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
+  <info-modal  class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
-// import IndexView from './IndexView.vue';
 import { watchEffect } from 'vue';
-// import atrApi from '@/api/atrAPI';
 import { userStore } from '@/stores';
-// import { useRouter } from 'vue-router';
-// import infoModal from '@/components/infoModal.vue';
-
 import { useApi } from '@/hooks/useApi';
 import { useModal } from '@/hooks/useModal';
+import { storeToRefs } from 'pinia';
 
 export default {
-  // components: { infoModal },
   setup() {
     const store = userStore();
+    const { messageContent } = storeToRefs(store);
     const { checkLoginStatus, logOut } = useApi();
-    const { infoModal, hideInfoModal, messageContent } = useModal();
-
-    // 原本的程式碼
-    // const store = userStore();
-    // const router = useRouter()
-    // const infoModal = ref(null);
-    // const messageContent = ref({
-    //   title: '提示',
-    //   message: '',
-    //   status: '',
-    // })
-    // function hideInfoModal() {
-    //   infoModal.value.hideModal();
-    //   messageContent.value.title = '提示';
-    //   messageContent.value.message = '';
-    //   messageContent.value.status = '';
-    // }
-
-    // async function checkLoginStatus() {
-    //   const res = await atrApi.checkLoginStatus();
-    //   if (!res.success) {
-    //     router.push('/');
-    //   }
-    // }
-    // async function logOut() {
-    //   const res = await atrApi.logOut();
-    //   if (res.success) {
-    //     router.push('/');
-    //   } else {
-    //     messageContent.value.message = res.response.data.message;
-    //     infoModal.value.openModal();
-    //   }
-    //   store.$patch({ token: '', login: false, });
-    // }
-
-
+    const { infoModal, hideInfoModal } = useModal();
     watchEffect(() => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       store.$patch({ token: token, login: true, });
