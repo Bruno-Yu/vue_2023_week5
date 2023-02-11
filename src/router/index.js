@@ -46,8 +46,8 @@ const router = createRouter({
   linkExactActiveClass: 'text-blue-500'
 });
 
-router.beforeEach((to, from, next) => { 
-  next(); // 注意: 若沒有呼叫 next() 則路由不會被渲染
-})
+// router.beforeEach((to, from, next) => { 
+//   next(); // 注意: 若沒有呼叫 next() 則路由不會被渲染
+// })
 
 export default router;

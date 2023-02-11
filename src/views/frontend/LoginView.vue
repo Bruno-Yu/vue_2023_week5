@@ -70,13 +70,12 @@
       </div>
     </div>
   </section>
-  <info-modal   class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
+  <info-modal class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
 import { ref } from 'vue';
-import { useApi } from '@/hooks/useApi';
-import { useModal } from '@/hooks/useModal';
+import { useApiModal } from '@/hooks/useApiModal';
 import { userStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 
@@ -84,8 +83,8 @@ export default {
   setup() {
     const store = userStore();
     const { messageContent } = storeToRefs(store);
-    const { login } = useApi();
-    const { hideInfoModal, infoModal } = useModal();
+    const { hideInfoModal, infoModal, login } = useApiModal();
+
     const password = ref('');
     const account = ref('');
     function submit(account, password) {

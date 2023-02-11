@@ -106,168 +106,41 @@
         <p v-else class="text-gray-600">請選擇單一產品查看</p>
       </div>
     </div>
-    <editModal class="editModal" ref="modal" :currentItem="currentItem" :isNew="isNew" @update-product="editProduct"
+    <editModal class="editModal" ref="editModal" :currentItem="currentItem" :isNew="isNew" @update-product="editProduct"
       @add-product="addAdminProduct" />
-    <info-modal  class="infoModal" ref="infoModal" :content="messageContent" @delete-product="deleteAdminProduct"
+    <info-modal class="infoModal" ref="infoModal" :content="messageContent" @delete-product="deleteAdminProduct"
       @hide-modal="hideInfoModal" />
   </main>
 </template>
 
 <script>
 import editModal from '@/components/editModal.vue';
-import infoModal from '@/components/infoModal.vue';
 import { onMounted } from 'vue';
-import { useModal } from '@/hooks/useModal';
-import { useApi } from '@/hooks/useApi';
+import { useApiModal } from '@/hooks/useApiModal';
 import { storeToRefs } from 'pinia';
 import { userStore, } from '@/stores';
-// import { useAdmin } from '@/hooks/useAdmin';
 
 export default {
-  components: { editModal, infoModal },
+  components: { editModal },
   setup() {
-    const { modal, infoModal, hideInfoModal, isNew, openDeleteModal, openModal, hideModal, openNewModal } = useModal();
-    const { editAdminProduct, addAdminProduct, getAdminProducts, deleteAdminProduct } = useApi();
-
     const store = userStore();
-    // const { products, currentItem } = useAdmin();
     const { adminProducts, currentItem, messageContent } = storeToRefs(store);
+    const { editModal, infoModal, hideInfoModal, isNew, openDeleteModal, openModal, hideModal, openNewModal, editAdminProduct, addAdminProduct, getAdminProducts, deleteAdminProduct } = useApiModal();
     function check(prop) {
       store.$patch({ currentItem: prop });
-      // currentItem.value = prop;
     }
     function editProduct(data) {
       editAdminProduct(data);
     }
 
-    // 原程式碼
-    // const data = ref([]);
-    // const currentItem = ref({});
-    // const store = userStore();
-    // const router = useRouter();
-
-
-    // const isNew = ref(false);
-
-    // function check(prop) {
-    //   currentItem.value = prop;
-    // }
-    // // 訊息視窗
-    // const infoModal = ref(null);
-    // const messageContent = ref({
-    //   title: '提示',
-    //   message: '',
-    //   status: '',
-    // })
-    // // 刪除視窗
-    // function openDeleteModal(item) {
-    //   currentItem.value = item;
-    //   messageContent.value.title = '刪除提示';
-    //   messageContent.value.message = '請確認是否要刪除!';
-    //   messageContent.value.status = 'delete';
-    //   infoModal.value.openModal();
-    // }
-    // function hideInfoModal() {
-    //   infoModal.value.hideModal();
-    //   messageContent.value.title = '提示';
-    //   messageContent.value.message = '';
-    //   messageContent.value.status = '';
-    // }
-
-    // // 編輯 & 新增視窗 & 邏輯
-    // const modal = ref(null);
-    // function openModal(item) {
-    //   currentItem.value = item;
-    //   isNew.value = false;
-    //   modal.value.openModal();
-    // }
-    // function hideModal() {
-    //   modal.value.hideModal();
-    // }
-    // function openNewModal() {
-    //   isNew.value = true;
-    //   modal.value.openModal();
-    // }
-    // async function editAdminProduct(data) {
-    //   const { id } = data;
-    //   const res = await atrApi.editAdminProduct(id, data);
-    //   if (res.success) {
-    //     hideModal();
-    //     messageContent.value.message = res.message;
-    //     infoModal.value.openModal();
-    //     getAdminProducts();
-    //   } else {
-    //     if (typeof res.response.data.message === 'string') {
-    //       messageContent.value.message = res.response.data.message;
-    //     } else {
-    //       messageContent.value.message = res.response.data.message.join(', ');
-    //     }
-    //     infoModal.value.openModal();
-    //   }
-    // }
-    // async function addAdminProduct(data) {
-    //   const res = await atrApi.addAdminProduct(data);
-    //   if (res.success) {
-    //     hideModal();
-    //     messageContent.value.message = res.message;
-    //     infoModal.value.openModal();
-    //     getAdminProducts();
-    //   } else {
-    //     if (typeof res.response.data.message === 'string') {
-    //       messageContent.value.message = res.response.data.message;
-    //     } else {
-    //       messageContent.value.message = res.response.data.message.join(', ');
-    //     }
-    //     infoModal.value.openModal();
-    //   }
-    // }
-
-    // async function getAdminProducts() {
-    //   const res = await atrApi.getAdminProducts();
-    //   if (res.success) {
-    //     data.value = res.products;
-    //   } else {
-    //     if (typeof res.response.data.message === 'string') {
-    //       messageContent.value.message = res.response.data.message;
-    //     } else {
-    //       messageContent.value.message = res.response.data.message.join(', ');
-    //     }
-    //     infoModal.value.openModal();
-    //   }
-    // }
-
-    // async function deleteAdminProduct() {
-    //   hideInfoModal();
-    //   const res = await atrApi.deleteAdminProduct(currentItem.value.id);
-    //   if (res.success) {
-    //     messageContent.value.message = res.message;
-    //   } else {
-    //     if (typeof res.response.data.message === 'string') {
-    //       messageContent.value.message = res.response.data.message;
-    //     } else {
-    //       messageContent.value.message = res.response.data.message.join(', ');
-    //     }
-    //   }
-    //   infoModal.value.openModal();
-    //   getAdminProducts();
-    // }
-
-
     onMounted(() => {
       getAdminProducts();
-      // infoModal.value = document.querySelector('.infoModal');
-      // modal.value = document.querySelector('.editModal');
-      // if (store.$state.login) {
-      //   getAdminProducts();
-      // } else {
-      //   router.push('/');
-      // }
     });
     return {
       adminProducts,
       currentItem,
       check,
-      modal,
+      editModal,
       editProduct,
       infoModal,
       messageContent,

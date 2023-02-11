@@ -74,22 +74,22 @@
       府城印象 @copyRight
     </p>
   </footer>
-  <info-modal  class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
+  <infoModal class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
 </template>
 
 <script>
+// import infoModal from '@/components/infoModal.vue';
 import { watchEffect } from 'vue';
 import { userStore } from '@/stores';
-import { useApi } from '@/hooks/useApi';
-import { useModal } from '@/hooks/useModal';
+import { useApiModal } from '@/hooks/useApiModal';
 import { storeToRefs } from 'pinia';
 
 export default {
   setup() {
     const store = userStore();
     const { messageContent } = storeToRefs(store);
-    const { checkLoginStatus, logOut } = useApi();
-    const { infoModal, hideInfoModal } = useModal();
+    const { infoModal, hideInfoModal, checkLoginStatus, logOut } = useApiModal();
+    // const { infoModal, hideInfoModal } = useModal();
     watchEffect(() => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       store.$patch({ token: token, login: true, });
