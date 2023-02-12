@@ -53,6 +53,91 @@
             </RouterLink>
           </li>
           <li class="nav-item p-2">
+            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="attractions">體驗
+            </RouterLink>
+          </li>
+          <!-- <li class="nav-item p-2">
+            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="shoppingCart">購物車
+            </RouterLink>
+          </li> -->
+          <li class="nav-item dropdown relative">
+            <a class="dropdown-toggle pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out dropdown-toggle flex items-center whitespace-nowrap"
+              href="#" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">購物車
+            </a>
+            <ul class="
+              dropdown-menu
+              min-w-max
+              absolute
+              hidden
+              bg-white
+              text-base
+              z-50
+              float-left
+              py-2
+              list-none
+              text-left
+              rounded-lg
+              shadow-lg
+              mt-1
+              hidden
+              m-0
+              bg-clip-padding
+              border-none
+            " aria-labelledby="dropdownMenuButton2">
+              <li>
+                <a class="
+                  dropdown-item
+                  text-sm
+                  py-2
+                  px-4
+                  font-normal
+                  block
+                  w-full
+                  whitespace-nowrap
+                  bg-transparent
+                  text-gray-700
+                  hover:bg-gray-100
+                " href="#">Action</a>
+              </li>
+              <li>
+                <a class="
+                    dropdown-item
+                    text-sm
+                    py-2
+                    px-4
+                    font-normal
+                    block
+                    w-full
+                    whitespace-nowrap
+                    bg-transparent
+                    text-gray-700
+                    hover:bg-gray-100
+                  " href="#">Another action</a>
+              </li>
+              <li>
+                <a class="
+                    dropdown-item
+                    text-sm
+                    py-2
+                    px-4
+                    font-normal
+                    block
+                    w-full
+                    whitespace-nowrap
+                    bg-transparent
+                    text-gray-700
+                    hover:bg-gray-100
+                  " href="#">Something else here</a>
+              </li>
+            </ul>
+          </li>
+          <!-- <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="shoppingCart">購物車
+            </RouterLink> -->
+          <li class="nav-item p-2">
+            <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="login">訂購
+            </RouterLink>
+          </li>
+          <li class="nav-item p-2">
             <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="login">登入
             </RouterLink>
           </li>

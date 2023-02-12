@@ -15,6 +15,14 @@ const routes = [
           path: 'login',
           component: () => import('../views/frontend/LoginView.vue'),
         },
+        {
+          path: 'attractions',
+          component: () => import('../views/frontend/AttractionsView.vue'),
+        },
+        {
+          path: 'shoppingCart',
+          component: () => import('../views/frontend/shoppingCartView.vue'),
+        },
       ],
     },
     {

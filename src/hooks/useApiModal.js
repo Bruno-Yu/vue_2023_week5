@@ -18,11 +18,8 @@ export const useApiModal = () => {
       infoModal.value.hideModal();
           store.$patch((state) => { state.messageContent.title = '提示'; state.messageContent.message = ''; state.messageContent.status = ''; });
     }
-
 //  判別是 新增還是編輯視窗
     const isNew = ref(false);
-
-
      // 刪除視窗
     function openDeleteModal(item) {
       store.$patch({currentItem:item});

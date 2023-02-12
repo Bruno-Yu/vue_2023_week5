@@ -29,11 +29,54 @@ class atrApi extends Api {
     return res;
   }
 
+    // 前台取得景點
+  static async getProducts( page=1, category='') {
+    const queryPage = `?page=${page}`;
+    const queryCategory = category? `?category=${category}`: '';
+    const res = await this.callAxios('GET', `${apiPrefix}api/${apiPath}/products${queryPage}${queryCategory}`, null, undefined, undefined, false);
+    return res;
+  }
+
+  // 新增購物車
+  static async addToCart({data}) {
+      const params = {
+      data,
+    };
+    const res = await this.callAxios('POST', `${apiPrefix}api/${apiPath}/cart`, params, undefined, undefined, false);
+    return res;
+  }
+
+
+  // 取得購物車
+    static async getCart() {
+    const res = await this.callAxios('GET', `${apiPrefix}api/${apiPath}/cart`, null, undefined, undefined, false);
+    return res;
+  }
+
+  // 更新購物車數量
+  static async editCart({ data }, id) {
+    const params = {
+      data,
+    }
+    const res = await this.callAxios('PUT', `${apiPrefix}api/${apiPath}/cart/${id}`, params, undefined, undefined, false);
+    return res;
+  }
+
+    // 刪除購物車單一產品
+  static async deleteCartProduct(id) {
+    const res = await this.callAxios('DELETE', `${apiPrefix}api/${apiPath}/cart/${id}`, null, undefined, undefined, false);
+    return res;
+  }
+
+      // 刪除購物車全部產品
+  static async deleteCartAll() {
+    const res = await this.callAxios('DELETE', `${apiPrefix}api/${apiPath}/carts`, null, undefined, undefined, false);
+    return res;
+  }
+
+
   // admin取得景點
   static async getAdminProducts() {
-    // const params = {
-    //   rocNumOrBan,
-    // };
     const res = await this.callAxios('GET', `${apiPrefix}api/${apiPath}/admin/products/all`, null, undefined, undefined, true);
     return res;
   }
