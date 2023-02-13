@@ -20,8 +20,12 @@ const routes = [
           component: () => import('../views/frontend/AttractionsView.vue'),
         },
         {
-          path: 'shoppingCart',
-          component: () => import('../views/frontend/shoppingCartView.vue'),
+          path: 'collections',
+          component: () => import('../views/frontend/collectionsView.vue'),
+        },
+        {
+          path: 'orders',
+          component: () => import('../views/frontend/ordersView.vue'),
         },
       ],
     },
