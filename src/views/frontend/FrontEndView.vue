@@ -62,7 +62,8 @@
           </li> -->
           <li class="nav-item dropdown relative">
             <a class="dropdown-toggle pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out dropdown-toggle flex items-center whitespace-nowrap"
-              href="#" type="button" id="dropdownMenuButton1"  aria-expanded="false" @click.prevent="toggleCartDropdown">購物車
+              href="#" type="button" id="dropdownMenuButton1" aria-expanded="false"
+              @click.prevent="toggleCartDropdown">購物車
             </a>
             <div ref="cartDropdown" class="
               dropdown-menu
@@ -85,41 +86,45 @@
               bg-clip-padding
               border-none
             " aria-labelledby="dropdownMenuButton2">
-            <h3 class="text-center my-2">購物車</h3>
-            <div v-if="cartProducts">
-              <ul  class="border rounded p-2">
-                <li v-for="(item) in cartProducts" :key="item.id" class="flex justify-center w-full">
-                  <div class="flex flex-row rounded-lg bg-white shadow  w-full">
-                    <div class="p-1">
-                      <img class="w-20 h-20 object-cover rounded " :src="item.product.imageUrl" :alt="item.product_id" />
-                    </div>
-                    <div class="p-2 flex flex-col justify-start w-full relative">
-                      <div class="flex justify-between items-center">
-                        <div>
-                          <h5 class="text-gray-900 font-medium mb-2">{{ item.product.title }}</h5>
-                          <div class="flex justify-between items-center">
-                            <p class="text-gray-600 text-xs">2023-01-23</p>
-                            <p class="text-gray-600 text-xs">成人 x{{ item.qty }} </p>
-                          </div>
-                        </div>
-                          <font-awesome-icon class="w-5 h-5 text-gray-600" icon="fa-regular fa-trash-can" @click="deleteCartProduct(item.id)"></font-awesome-icon>
+              <h3 class="text-center my-2">購物車</h3>
+              <div v-if="cartProducts">
+                <ul class="border rounded p-2">
+                  <li v-for="(item) in cartProducts" :key="item.id" class="flex justify-center w-full">
+                    <div class="flex flex-row rounded-lg bg-white shadow  w-full">
+                      <div class="p-1">
+                        <img class="w-20 h-20 object-cover rounded " :src="item.product.imageUrl"
+                          :alt="item.product_id" />
                       </div>
-                      <p class="text absolute right-1 bottom-1">TWD {{ finalTotal }}</p>
+                      <div class="p-2 flex flex-col justify-start w-full relative">
+                        <div class="flex justify-between items-center">
+                          <div>
+                            <h5 class="text-gray-900 font-medium mb-2">{{ item.product.title }}</h5>
+                            <div class="flex justify-between items-center">
+                              <p class="text-gray-600 text-xs">2023-01-23</p>
+                              <p class="text-gray-600 text-xs">成人 x{{ item.qty }} </p>
+                            </div>
+                          </div>
+                          <font-awesome-icon class="w-5 h-5 text-gray-600" icon="fa-regular fa-trash-can"
+                            @click="deleteCartProduct(item.id)"></font-awesome-icon>
+                        </div>
+                        <p class="text absolute right-1 bottom-1">TWD {{ finalTotal }}</p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-  
-              <div class="flex justify-between mt-2">
-                <p>共計{{ cartProducts?.length  || 0 }} 件</p>
-                <button type="button" class=" inline-block px-6 py-2.5 bg-black text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out">立即購買</button>
+                  </li>
+                </ul>
+
+                <div class="flex justify-between mt-2">
+                  <p>共計{{ cartProducts?.length  || 0 }} 件</p>
+                  <button type="button"
+                    class=" inline-block px-6 py-2.5 bg-black text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out"
+                    @click="goToOrdersView">立即購買</button>
+                </div>
               </div>
-            </div>
-            <div v-else>
-              <div class="border rounded p-2 text-center flex items-center justify-center">
-                <p>目前購物車尚無商品</p>
+              <div v-else>
+                <div class="border rounded p-2 text-center flex items-center justify-center">
+                  <p>目前購物車尚無商品</p>
+                </div>
               </div>
-            </div>
             </div>
           </li>
           <!-- <RouterLink class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" to="shoppingCart">購物車
@@ -156,6 +161,7 @@
 import atrApi from '@/api/atrAPI';
 // import editModal from '@/components/editModal.vue';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 // import { useApiModal } from '@/hooks/useApiModal';
 // import { storeToRefs } from 'pinia';
 // import { userStore, } from '@/stores';
@@ -177,7 +183,6 @@ export default {
     async function getCart() {
       const res = await atrApi.getCart();
       if (res.success) {
-        console.log('getCart', res);
         cartProducts.value = JSON.parse(JSON.stringify(res.data.carts));
         finalTotal.value = res.data.final_total;
 
@@ -196,6 +201,11 @@ export default {
       }
     }
 
+    const router = useRouter();
+    function goToOrdersView() {
+      toggleCartDropdown();
+      router.push('orders');
+    }
 
     onMounted(() => {
       getCart();
@@ -207,7 +217,8 @@ export default {
       getCart,
       finalTotal,
       cartProducts,
-      deleteCartProduct
+      deleteCartProduct,
+      goToOrdersView
     };
   }
 }
