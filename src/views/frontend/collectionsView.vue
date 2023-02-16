@@ -45,6 +45,7 @@
 </template>
 
 <script>
+
 import atrApi from '@/api/atrAPI';
 import { ref, onMounted } from 'vue';
 import { useApiModal } from '@/hooks/useApiModal';
@@ -62,7 +63,6 @@ export default {
     async function getCart() {
       const res = await atrApi.getCart();
       if (res.success) {
-        console.log('getCart', res);
         cartProducts.value = JSON.parse(JSON.stringify(res.data.carts));
 
       } else {

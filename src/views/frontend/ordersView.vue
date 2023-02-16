@@ -1,17 +1,5 @@
 <template>
   <main class="px-10 py-10 mx-auto max-w-5xl">
-    <!-- headings -->
-    <!-- <div class="block rounded-lg shadow-lg bg-white">
-    <div class="mb-2 p-2 flex"  type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-
-      <p>訂購人資料</p>
-    </div>
-  <div class="collapse" id="collapseExample">
-    <div class="block p-6 rounded-t-lg shadow-lg bg-white">
-      Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-    </div>
-  </div>
-  </div> -->
     <div class="accordion mb-5" id="personalInfo">
       <div class="accordion-item bg-white border border-gray-200">
         <h2 class="accordion-header mb-0" id="headingOne">
@@ -40,12 +28,52 @@
         <div id="collapseOne" class="accordion-collapse collapse show " aria-labelledby="headingOne"
           data-bs-parent="#accordionExample">
           <div class="accordion-body py-4 px-5">
-            <form>
-              <div class="grid grid-cols-2 gap-4">
+              <v-form ref="userInputForm"  v-slot="{ errors }" >
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="form-group mb-6">
+                    <label for="userName" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">姓名</label>
+                    <v-field type="text" id="userName" placeholder="請輸入姓名" name="姓名" :class="{ 'is-invalid': errors['姓名'] }" rules="required" v-model="userInput.userName" class="form-control
+            block
+            w-full
+            px-3
+            py-1.5
+            text-base
+            font-normal
+            text-gray-700
+            bg-white bg-clip-padding
+            border border-solid border-gray-300
+            rounded
+            transition
+            ease-in-out
+            m-0
+            focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" />
+            <error-message name="姓名" class="invalid-feedback"/>
+                  </div>
+                  <div class="form-group mb-6">
+                    <label for="phone" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">手機</label>
+                    <v-field type="text" name="手機" id="phone" placeholder="請輸入手機號碼"   :class="{ 'is-invalid': errors['手機'] }"  :rules="verifyPhone" v-model="userInput.phone"
+            class="form-control
+            block
+            w-full
+            px-3
+            py-1.5
+            text-base
+            font-normal
+            text-gray-700
+            bg-white bg-clip-padding
+            border border-solid border-gray-300
+            rounded
+            transition
+            ease-in-out
+            m-0
+            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+            <error-message name="手機" class="invalid-feedback"/>
+                  </div>
+                </div>
                 <div class="form-group mb-6">
-                  <label for="name" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">姓名</label>
-                  <input type="text" class="form-control
-          block
+                  <label for="email" class="form-label inline-block mb-2  text-sm font-bold text-gray-700">電子信箱</label>
+                  <v-field type="email" id="email" name="電子信箱" placeholder="請輸入信箱地址"  :class="{ 'is-invalid': errors['電子信箱'] }"  rules="email|required" v-model="userInput.email"
+                  class="form-control block
           w-full
           px-3
           py-1.5
@@ -58,46 +86,10 @@
           transition
           ease-in-out
           m-0
-          focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" id="name" placeholder="請輸入姓名">
+          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"  />
+          <error-message name="電子信箱" class="invalid-feedback"/>
                 </div>
-                <div class="form-group mb-6">
-                  <label for="phone" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">手機</label>
-                  <input type="number" class="form-control
-          block
-          w-full
-          px-3
-          py-1.5
-          text-base
-          font-normal
-          text-gray-700
-          bg-white bg-clip-padding
-          border border-solid border-gray-300
-          rounded
-          transition
-          ease-in-out
-          m-0
-          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="phone"
-                    placeholder="請輸入手機號碼">
-                </div>
-              </div>
-              <div class="form-group mb-6">
-                <label for="email" class="form-label inline-block mb-2  text-sm font-bold text-gray-700">電子信箱</label>
-                <input type="email" class="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="email" placeholder="請輸入信箱地址">
-              </div>
-            </form>
+              </v-form>
           </div>
         </div>
       </div>
@@ -173,7 +165,7 @@
         <p class="text-gray-600">{{ totalQty }} 件商品共 <span class="text-gray-700 text-lg"> TWD {{ finalTotal }}</span>
         </p>
         <button type="button"
-          class=" inline-block px-6 py-2.5 bg-black text-white font-medium leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out">確認付款</button>
+          class=" inline-block px-6 py-2.5 bg-black text-white font-medium leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out" @click="confirmToPay">確認付款</button>
       </div>
     </div>
     <info-modal class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
@@ -181,6 +173,9 @@
 </template>
 
 <script>
+
+
+
 import atrApi from '@/api/atrAPI';
 import dayjs from 'dayjs/esm/index.js';
 import helper from '@/assets/js/helper';
@@ -217,12 +212,35 @@ export default {
       carts.forEach(item => { qty += item.qty });
       return qty;
     }
-    // async function deleteCartProduct(id) {
-    //   const res = await atrApi.deleteCartProduct(id);
-    //   if (res.success) {
-    //     getCart();
-    //   }
-    // }
+
+    // 使用者輸入
+
+    const userInput = ref({
+      userName: '',
+      phone: '',
+      email: '',
+    })
+
+    // const { handleSubmit } = useForm();
+    const userInputForm = ref(null);
+    // 自訂驗證
+    function verifyPhone(value) {
+      const phoneNumber = /^(09)[0-9]{8}$/;
+      return phoneNumber.test(value) ? true : '需要正確的電話號碼';
+    }
+    // 確認付款
+    async function confirmToPay() {
+      const res = await userInputForm.value.validate();
+      // console.log(res, res.valid);
+      if (res.valid) {
+        store.$patch((state) => { state.messageContent.message = '驗證無誤' });
+
+      } else {
+        store.$patch((state) => { state.messageContent.message = '填寫有誤' });
+      }
+      infoModal.value.openModal();
+
+    }
 
 
     onMounted(() => {
@@ -237,7 +255,11 @@ export default {
       finalTotal,
       dayjs,
       helper,
-      totalQty
+      totalQty,
+      confirmToPay,
+      userInput,
+      verifyPhone,
+      userInputForm
     }
 
   },
