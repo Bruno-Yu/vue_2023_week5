@@ -28,11 +28,12 @@
         <div id="collapseOne" class="accordion-collapse collapse show " aria-labelledby="headingOne"
           data-bs-parent="#accordionExample">
           <div class="accordion-body py-4 px-5">
-              <v-form ref="userInputForm"  v-slot="{ errors }" >
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="form-group mb-6">
-                    <label for="userName" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">姓名</label>
-                    <v-field type="text" id="userName" placeholder="請輸入姓名" name="姓名" :class="{ 'is-invalid': errors['姓名'] }" rules="required" v-model="userInput.userName" class="form-control
+            <v-form ref="userInputForm" v-slot="{ errors }">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="form-group mb-6">
+                  <label for="userName" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">姓名</label>
+                  <v-field type="text" id="userName" placeholder="請輸入姓名" name="姓名"
+                    :class="{ 'is-invalid': errors['姓名'] }" rules="required" v-model="userInput.userName" class="form-control
             block
             w-full
             px-3
@@ -47,12 +48,12 @@
             ease-in-out
             m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" />
-            <error-message name="姓名" class="invalid-feedback"/>
-                  </div>
-                  <div class="form-group mb-6">
-                    <label for="phone" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">手機</label>
-                    <v-field type="text" name="手機" id="phone" placeholder="請輸入手機號碼"   :class="{ 'is-invalid': errors['手機'] }"  :rules="verifyPhone" v-model="userInput.phone"
-            class="form-control
+                  <error-message name="姓名" class="invalid-feedback" />
+                </div>
+                <div class="form-group mb-6">
+                  <label for="phone" class="form-label inline-block mb-2 text-sm font-bold text-gray-700">手機</label>
+                  <v-field type="tel" name="手機" id="phone" placeholder="請輸入手機號碼" :class="{ 'is-invalid': errors['手機'] }"
+                    :rules="verifyPhone" v-model="userInput.phone" class="form-control
             block
             w-full
             px-3
@@ -67,13 +68,13 @@
             ease-in-out
             m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
-            <error-message name="手機" class="invalid-feedback"/>
-                  </div>
+                  <error-message name="手機" class="invalid-feedback" />
                 </div>
-                <div class="form-group mb-6">
-                  <label for="email" class="form-label inline-block mb-2  text-sm font-bold text-gray-700">電子信箱</label>
-                  <v-field type="email" id="email" name="電子信箱" placeholder="請輸入信箱地址"  :class="{ 'is-invalid': errors['電子信箱'] }"  rules="email|required" v-model="userInput.email"
-                  class="form-control block
+              </div>
+              <div class="form-group mb-6">
+                <label for="email" class="form-label inline-block mb-2  text-sm font-bold text-gray-700">電子信箱</label>
+                <v-field type="email" id="email" name="電子信箱" placeholder="請輸入信箱地址"
+                  :class="{ 'is-invalid': errors['電子信箱'] }" rules="email|required" v-model="userInput.email" class="form-control block
           w-full
           px-3
           py-1.5
@@ -86,10 +87,29 @@
           transition
           ease-in-out
           m-0
-          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"  />
-          <error-message name="電子信箱" class="invalid-feedback"/>
-                </div>
-              </v-form>
+          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+                <error-message name="電子信箱" class="invalid-feedback" />
+              </div>
+              <div class="form-group mb-6">
+                <label for="address" class="form-label inline-block mb-2  text-sm font-bold text-gray-700">地址</label>
+                <v-field type="text" id="address" name="地址" placeholder="請輸入地址" :class="{ 'is-invalid': errors['地址'] }"
+                  rules="required" v-model="userInput.address" class="form-control block
+          w-full
+          px-3
+          py-1.5
+          text-base
+          font-normal
+          text-gray-700
+          bg-white bg-clip-padding
+          border border-solid border-gray-300
+          rounded
+          transition
+          ease-in-out
+          m-0
+          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+                <error-message name="地址" class="invalid-feedback" />
+              </div>
+            </v-form>
           </div>
         </div>
       </div>
@@ -165,7 +185,8 @@
         <p class="text-gray-600">{{ totalQty }} 件商品共 <span class="text-gray-700 text-lg"> TWD {{ finalTotal }}</span>
         </p>
         <button type="button"
-          class=" inline-block px-6 py-2.5 bg-black text-white font-medium leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out" @click="confirmToPay">確認付款</button>
+          class=" inline-block px-6 py-2.5 bg-black text-white font-medium leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out"
+          @click="confirmToPay">確認付款</button>
       </div>
     </div>
     <info-modal class="infoModal" ref="infoModal" :content="messageContent" @hide-modal="hideInfoModal" />
@@ -196,13 +217,14 @@ export default {
       userName: '',
       phone: '',
       email: '',
+      address: '',
     })
 
     const userInputForm = ref(null);
     // 自訂驗證
     function verifyPhone(value) {
       const phoneNumber = /^(09)[0-9]{8}$/;
-      return phoneNumber.test(value) ? true : '需要正確的電話號碼';
+      return phoneNumber.test(value) && value.length >= 8 && value.length <= 10 ? true : '需要正確的電話號碼';
     }
     // 確認付款
     async function confirmToPay() {
