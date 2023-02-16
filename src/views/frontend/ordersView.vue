@@ -176,7 +176,7 @@
 
 
 
-import atrApi from '@/api/atrAPI';
+
 import dayjs from 'dayjs/esm/index.js';
 import helper from '@/assets/js/helper';
 import { ref, onMounted } from 'vue';
@@ -186,32 +186,9 @@ import { storeToRefs } from 'pinia';
 
 export default {
   setup() {
+    const { hideInfoModal, infoModal, getCart, cartProducts, finalTotal, totalQty } = useApiModal();
     const store = userStore();
     const { messageContent } = storeToRefs(store);
-    const { hideInfoModal, infoModal } = useApiModal();
-
-    const cartProducts = ref([]);
-    const finalTotal = ref(0);
-    const totalQty = ref(0);
-    async function getCart() {
-      const res = await atrApi.getCart();
-      if (res.success) {
-        cartProducts.value = JSON.parse(JSON.stringify(res.data.carts));
-        finalTotal.value = res.data.final_total;
-        totalQty.value = checkQty(res.data.carts);
-      } else {
-        if (typeof res.response.data.message === 'string') {
-          store.$patch((state) => { state.messageContent.message = res.response.data.message })
-        } else {
-          store.$patch((state) => { state.messageContent.message = res.response.data.message.join(', ') })
-        }
-      }
-    }
-    function checkQty(carts) {
-      let qty = 0;
-      carts.forEach(item => { qty += item.qty });
-      return qty;
-    }
 
     // 使用者輸入
 
@@ -221,7 +198,6 @@ export default {
       email: '',
     })
 
-    // const { handleSubmit } = useForm();
     const userInputForm = ref(null);
     // 自訂驗證
     function verifyPhone(value) {
@@ -241,7 +217,6 @@ export default {
       infoModal.value.openModal();
 
     }
-
 
     onMounted(() => {
       getCart();

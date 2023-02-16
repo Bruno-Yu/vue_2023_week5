@@ -114,7 +114,7 @@
                 </ul>
 
                 <div class="flex justify-between mt-2">
-                  <p>共計{{ cartProducts?.length  || 0 }} 件</p>
+                  <p>共計{{ cartProducts?.length || 0 }} 件</p>
                   <button type="button"
                     class=" inline-block px-6 py-2.5 bg-black text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-black hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none transition duration-150 ease-in-out"
                     @click="goToOrdersView">立即購買</button>
@@ -158,47 +158,19 @@
 
 
 <script>
-import atrApi from '@/api/atrAPI';
-// import editModal from '@/components/editModal.vue';
+
+import { useApiModal } from '@/hooks/useApiModal';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-// import { useApiModal } from '@/hooks/useApiModal';
-// import { storeToRefs } from 'pinia';
-// import { userStore, } from '@/stores';
-import { userStore } from '@/stores';
-import { storeToRefs } from 'pinia';
 
 export default {
   setup() {
+    const { getCart, cartProducts, finalTotal, deleteCartProduct } = useApiModal();
+
     // 購物車下拉表單
     const cartDropdown = ref(null);
     function toggleCartDropdown() {
       cartDropdown.value.classList.toggle('hidden');
-    }
-
-    const store = userStore();
-    const { messageContent } = storeToRefs(store);
-    const cartProducts = ref([]);
-    const finalTotal = ref(0);
-    async function getCart() {
-      const res = await atrApi.getCart();
-      if (res.success) {
-        cartProducts.value = JSON.parse(JSON.stringify(res.data.carts));
-        finalTotal.value = res.data.final_total;
-
-      } else {
-        if (typeof res.response.data.message === 'string') {
-          store.$patch((state) => { state.messageContent.message = res.response.data.message })
-        } else {
-          store.$patch((state) => { state.messageContent.message = res.response.data.message.join(', ') })
-        }
-      }
-    }
-    async function deleteCartProduct(id) {
-      const res = await atrApi.deleteCartProduct(id);
-      if (res.success) {
-        getCart();
-      }
     }
 
     const router = useRouter();
@@ -213,7 +185,6 @@ export default {
     return {
       cartDropdown,
       toggleCartDropdown,
-      messageContent,
       getCart,
       finalTotal,
       cartProducts,

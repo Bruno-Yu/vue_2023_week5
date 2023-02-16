@@ -156,6 +156,37 @@ export const useApiModal = () => {
       infoModal.value.openModal();
   }
   
+  // 取購物車內容
+    const cartProducts = ref([]);
+    const finalTotal = ref(0);
+    const totalQty = ref(0);
+    async function getCart() {
+      const res = await atrApi.getCart();
+      if (res.success) {
+        cartProducts.value = JSON.parse(JSON.stringify(res.data.carts));
+        finalTotal.value = res.data.final_total;
+        totalQty.value = checkQty(res.data.carts);
+      } else {
+        if (typeof res.response.data.message === 'string') {
+          store.$patch((state) => { state.messageContent.message = res.response.data.message })
+        } else {
+          store.$patch((state) => { state.messageContent.message = res.response.data.message.join(', ') })
+        }
+      }
+    }
+    function checkQty(carts) {
+      let qty = 0;
+      carts.forEach(item => { qty += item.qty });
+      return qty;
+    }
 
-  return { editModal ,infoModal, showEditModal ,showInfoModal, hideInfoModal, isNew , openDeleteModal, openModal,  hideModal, openNewModal ,login, checkLoginStatus, logOut, getAdminProducts, addAdminProduct, editAdminProduct, deleteAdminProduct };
+    // 刪除購物車
+    async function deleteCartProduct(id) {
+      const res = await atrApi.deleteCartProduct(id);
+      if (res.success) {
+        getCart();
+      }
+    }
+
+  return { editModal ,infoModal, showEditModal ,showInfoModal, hideInfoModal, isNew , openDeleteModal, openModal,  hideModal, openNewModal ,login, checkLoginStatus, logOut, getAdminProducts, addAdminProduct, editAdminProduct, deleteAdminProduct,  getCart,  cartProducts, finalTotal, totalQty, deleteCartProduct };
 };
