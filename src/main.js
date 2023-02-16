@@ -16,7 +16,9 @@ import StarRating from 'vue-star-rating';
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import infoModal from '@/components/infoModal.vue';
-import Loading from 'vue-loading-overlay';
+// import Loading from 'vue-loading-overlay';
+import {LoadingPlugin} from 'vue-loading-overlay';
+
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
@@ -48,7 +50,10 @@ app.component('star-rating', StarRating);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('info-modal', infoModal);
 app.component('v-form', Form);
-app.component('PageLoading', Loading);
+// app.component('PageLoading', Loading);
+app.use(LoadingPlugin, {
+  color: '#FF0000'
+})
 app.component('v-field', Field);
 app.component('error-message', ErrorMessage);
 app.mount('#app');

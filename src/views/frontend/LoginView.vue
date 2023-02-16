@@ -8,7 +8,7 @@
             class="w-full" alt="Phone image" />
         </div>
         <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
-           <v-form ref="userInputForm"  v-slot="{ errors }" >
+          <v-form ref="userInputForm"  v-slot="{ errors }" >
             <!-- Email input -->
             <div class="mb-6">
               <v-field type="text" name="帳號" id="account"  :class="{ 'is-invalid': errors['帳號'] }" rules="required|email"
@@ -74,10 +74,6 @@
 </template>
 
 <script>
-
-
-
-
 
 import { ref } from 'vue';
 import { useApiModal } from '@/hooks/useApiModal';

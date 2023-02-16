@@ -2,6 +2,7 @@ import atrApi from '@/api/atrAPI';
 import { ref } from 'vue';
 import { userStore } from '@/stores';
 import { useRouter } from 'vue-router';
+import {useLoading} from 'vue-loading-overlay';
 
 
 export const useApiModal = () => { 
@@ -9,6 +10,29 @@ export const useApiModal = () => {
   // api 對應的訊息視窗
   const store = userStore();
   const router = useRouter();
+
+  // loading 設置
+  const $loading = useLoading({
+        // options
+    });
+
+  const params = {
+      color: '#000000',
+      loader: 'spinner',
+      width: 64,
+      height: 64,
+      backgroundColor: '#ffffff',
+      opacity: 0.5,
+      zIndex: 999,
+    }
+  const loader =ref(null);
+
+    function loaderShow(){
+      loader.value=  $loading.show(params);
+    }
+    function loaderHide(){
+      loader.value.hide;
+    }
 
   // 訊息相關 Modal
   const infoModal = ref(null);
@@ -57,14 +81,17 @@ export const useApiModal = () => {
         username,
         password,
       }
+      loaderShow()
       const res = await atrApi.login(params);
       if (res.success) {
         const { token, expired } = res;
         store.$patch({ token: token, login: true, });
         document.cookie = `hexToken=${token};expires=${new Date(expired)}; path=/`;
+        loaderHide();
         router.push(path)
       } else {
         store.$patch((state)=>{state.messageContent.message  = res.response.data.message})
+        loaderHide();
         infoModal.value.openModal();
       }
     }
@@ -78,11 +105,14 @@ export const useApiModal = () => {
     }
     // 使用者登出
     async function logOut(path='/') {
+      loaderShow();
       const res = await atrApi.logOut();
       if (res.success) {
+        loaderHide();
         router.push(path);
       } else {
         store.$patch((state)=>{state.messageContent.message  = res.response.data.message});
+        loaderHide();
         infoModal.value.openModal();
 
       }
@@ -91,9 +121,11 @@ export const useApiModal = () => {
 
     // 管理員取得產品資料
         async function getAdminProducts() {
+          loaderShow();
       const res = await atrApi.getAdminProducts();
       if (res.success) {
         store.$patch((state)=>{state.adminProducts  = res.products});
+        
       } else {
         if (typeof res.response.data.message === 'string') {
             store.$patch((state)=>{state.messageContent.message  = res.response.data.message})
@@ -101,41 +133,48 @@ export const useApiModal = () => {
           store.$patch((state)=>{state.messageContent.message  = res.response.data.message.join(', ')})
         }
       }
+      loaderHide();
     }
 
     // 新增產品
         async function addAdminProduct(data) {
+          loaderShow();
       const res = await atrApi.addAdminProduct(data);
       if (res.success) {
         editModal.value.hideModal();
         store.$patch((state)=>{state.messageContent.message  = res.message})
         infoModal.value.openModal();
         getAdminProducts();
+        loaderHide();
       } else {
         if (typeof res.response.data.message === 'string') {
           store.$patch((state)=>{state.messageContent.message  = res.response.data.message})
         } else {
           store.$patch((state)=>{state.messageContent.message  = res.response.data.message.join(', ')})
         }
+        loaderHide();
         infoModal.value.openModal();
       }
     }
     // 編輯產品
         async function editAdminProduct(data) {
+                loaderShow();
       const { id } = data;
       const res = await atrApi.editAdminProduct(id, data);
           if (res.success) {
-        console.log('useApi editModal',editModal )
+        // console.log('useApi editModal',editModal )
         editModal.value.hideModal();
         store.$patch((state)=>{state.messageContent.message  = res.message})
         infoModal.value.openModal();
         getAdminProducts();
+        loaderHide();
       } else {
         if (typeof res.response.data.message === 'string') {
           store.$patch((state)=>{state.messageContent.message  = res.response.data.message})
         } else {
           store.$patch((state)=>{state.messageContent.message  = res.response.data.message.join(', ')})
         }
+        loaderHide();
         infoModal.value.openModal();
       }
     }
